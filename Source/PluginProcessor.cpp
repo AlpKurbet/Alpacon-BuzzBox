@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    This file contains the basic framework code for a JUCE plugin processor.
+    Alp Kurbetci
 
   ==============================================================================
 */
@@ -42,13 +42,19 @@ juce::AudioProcessorValueTreeState::ParameterLayout BuzzBoxAudioProcessor::creat
 {
     std::vector <std::unique_ptr<juce::RangedAudioParameter>> params;
     
+   //An array to choose between dist modes
     juce::StringArray disMods = {"Hard", "Soft", "Saturation"};
     
+  //Parameter-Choice For Dist Model Choices
     auto DriveModel = std::make_unique<juce::AudioParameterChoice>(disModelID,disModelName,disMods,0);
+  
+  //Parameters for basic contols
     auto paramDrive = std::make_unique<juce::AudioParameterFloat>(inputID, inputName, 0.0f, 24.0f, 0.0f);
     auto paramOutput = std::make_unique<juce::AudioParameterFloat>(outputID, outputName, -24.0f, 24.0f, 0.0f);
     auto paramMix= std::make_unique<juce::AudioParameterFloat>(mixID, mixName, 0.0f, 1.0f, 1.0f);
     
+  
+  //Push the parameters 
     params.push_back(std::move(DriveModel));
     params.push_back(std::move(paramDrive));
     params.push_back(std::move(paramOutput));
@@ -66,6 +72,7 @@ void BuzzBoxAudioProcessor::parameterChanged(const juce::String &parameterID, fl
 
 void BuzzBoxAudioProcessor::updateParameters()
 {
+  //Static cast since we model choices as int values
     auto model = static_cast<int>(_treeState.getRawParameterValue(disModelID)->load());
     switch (model)
     {
