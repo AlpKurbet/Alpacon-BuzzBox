@@ -25,7 +25,7 @@ public:
     void reset();
     
     /*
-     The process block is for to handle different distortion processes like har/soft clipping
+     The main processing for the incoming samples in ProcessBlock of the AuidoProcessor
      */
     template <typename ProcessContext>
     void process(const ProcessContext& context) noexcept
@@ -57,7 +57,7 @@ public:
     }
     
     /*
-    
+     Here call the specific process for the chosen Distortion Model
      */
     SampleType processSample(SampleType inputSample, int channel) noexcept
     {
@@ -79,6 +79,7 @@ public:
         
             case DistortionModel::cSaturation:
         {
+          //Added channel to prepare the code if in future, a need to handle both channels occurs
             return processSaturation(inputSample, channel);
             break;
         }
@@ -86,6 +87,7 @@ public:
         }
     }
     
+    ///Hard Clipping algorithm
     SampleType processHardClip (SampleType inputSample)
     {
         // To drive the signal we multiply
@@ -106,7 +108,7 @@ public:
         return mix * juce::Decibels::decibelsToGain(_output.getNextValue());
         
     }
-    
+     ///Soft Clipping Algortihm with a hard clipping statement to adjust the signal no to go way above when the drive is adjusted.
     SampleType processSoftClip (SampleType inputSample)
     {
         auto wetSignal = inputSample * juce::Decibels::decibelsToGain(_input.getNextValue());
@@ -131,6 +133,7 @@ public:
         return mix * juce::Decibels::decibelsToGain(_output.getNextValue());
     }
     
+   ///Saturation Algortihm with a hard clipping statement to adjust the signal no to go way above when the drive is adjusted.
     SampleType processSaturation(SampleType inputSample , int channel)
     {
         auto drive = juce::jmap(_input.getNextValue(), 0.0f, 24.0f, 0.0f, 6.0f);
@@ -155,6 +158,7 @@ public:
 
     }
     
+  //Used enum to attenuate the models (better than string)
     enum class DistortionModel
     {
         cHard,
@@ -163,7 +167,7 @@ public:
     };
     
     
-    
+    //Fucntions to choose the Dist Models
     void setDrive(SampleType newDrive);
     void setMix(SampleType newMix);
     void setOutput(SampleType newOutput);
@@ -173,15 +177,21 @@ public:
     
     
 private:
+  
+  //Used smoothed values to avoid audio glitches
     juce::SmoothedValue<float> _input;
     juce::SmoothedValue<float> _mix;
     juce::SmoothedValue<float> _output;
     
-    
+    //To control the overall signal (In proess())
     juce::dsp::LinkwitzRileyFilter<float> dcFilter;
     
+  //For Soft Clipping
     float piDi =  2.0 / juce::MathConstants<float>::pi;
     
+  //Sample Rate
     float _sampleRate = 48000.0f;
+  
+  //Defauld model choice is Har Clipping
     DistortionModel _model = DistortionModel::cHard;
 };
