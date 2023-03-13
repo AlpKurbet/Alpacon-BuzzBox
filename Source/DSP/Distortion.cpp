@@ -10,6 +10,7 @@
 
 #include "Distortion.h"
 
+//JUCE example dsp folders have this line for the SampleType. It must be used just above every time typename is called
 template <typename SampleType>
 
 Distortion<SampleType>::Distortion()
@@ -19,6 +20,7 @@ Distortion<SampleType>::Distortion()
 
 template <typename SampleType>
 
+//Setting up the specs
 void Distortion<SampleType>::prepare(juce::dsp::ProcessSpec &spec)
 {
    
@@ -35,6 +37,7 @@ void Distortion<SampleType>::prepare(juce::dsp::ProcessSpec &spec)
 
 template <typename SampleType>
 
+//Reaching to the parameters from the ./Parameters/Globals.h
 void Distortion<SampleType>::reset()
 {
     if(_sampleRate <= 0) return;
@@ -51,6 +54,7 @@ void Distortion<SampleType>::reset()
 
 template <typename SampleType>
 
+//Getting the values from the user inputs
 void Distortion<SampleType>::setDrive(SampleType newDrive)
 {
     _input.setTargetValue(newDrive);
@@ -69,6 +73,7 @@ void Distortion<SampleType>::setOutput(SampleType nexOutput)
     _output.setTargetValue(nexOutput);
 }
 
+//Switching betwen choices
 template <typename SampleType>
 void Distortion<SampleType>::setDistortionModel(DistortionModel newModel)
 {
@@ -98,6 +103,6 @@ void Distortion<SampleType>::setDistortionModel(DistortionModel newModel)
      
 }
 
-
+//Setting up the types of variables that the typename template can have
 template class Distortion<float>;
 template class Distortion<double>;
