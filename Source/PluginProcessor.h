@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    This file contains the basic framework code for a JUCE plugin processor.
+   Alp Kurbetci
 
   ==============================================================================
 */
@@ -16,6 +16,9 @@
 //==============================================================================
 /**
 */
+
+//Add a listener 
+
 class BuzzBoxAudioProcessor  : public juce::AudioProcessor ,juce::AudioProcessorValueTreeState::Listener
                             #if JucePlugin_Enable_ARA
                              , public juce::AudioProcessorARAExtension
@@ -64,11 +67,14 @@ public:
     
 private:
     
+    //Value Tree State Object
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    
+    //Functions for parameter control
     void parameterChanged (const juce::String& parameterID, float newValue) override;
     void updateParameters();
     
-    
+    //Distortion Object
     Distortion<float> _myDistortion;
     
     
