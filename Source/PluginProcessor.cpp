@@ -204,6 +204,8 @@ void BuzzBoxAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         buffer.clear (i, 0, buffer.getNumSamples());
     
     juce::dsp::AudioBlock<float> block {buffer};
+  
+  //Passing the Samples into the Distortion object
     _myDistortion.process(juce::dsp::ProcessContextReplacing<float>(block));
 
 }
