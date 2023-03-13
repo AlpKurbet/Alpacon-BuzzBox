@@ -8,6 +8,8 @@
   ==============================================================================
 */
 
+//Global vars to acces easily
+
 #include "Globals.h"
 
 const juce::String disModelID      = "disModel";
@@ -23,4 +25,5 @@ const juce::String mixID        = "mix";
 const juce::String mixName      = "Mix";
 
 
+//For future models such as fuzz
 float MaxVal = 1.0f;
